@@ -1,0 +1,9 @@
+<%- layout('layouts/boilerplate.ejs') %>
+<table class="table w-75 mx-auto">
+    <thead>
+        <div class="mb-3 offset-2 mt-2">
+            <h2>Hello there <% if(currentUser) { %> <%= currentUser.username.charAt(0).toUpperCase() + currentUser.username.slice(1) %>!
+                <% } %></h2>
+        </div>
+    </thead>
+</table>

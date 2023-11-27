@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg style=" background-color: #e3f2fd;">
+    <div class=" container-fluid">
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav flex-column">
+                <a class="nav-link" href="/"><i class="bi bi-house"></i>
+                    Dashboard</a>
+                <a class="nav-link" href="/products"><i class="bi bi-archive"></i>
+                    Products</a>
+                <a class="nav-link" href=""><i class="bi bi-clipboard-data-fill"></i>
+                    Orders</a>
+                <% if (!currentUser){ %>
+                <a class="nav-link" href="/register"><i class="bi bi-person-add"></i>
+                    Register</a>
+                <a class="nav-link" href="/login"><i class="bi bi-box-arrow-in-right"></i>
+                    Login</a>
+                <% } else { %>
+                <a class="nav-link" href="/admins"><i class="bi bi-person-gear"></i>
+                    Admins</a>
+                <a class="nav-link" href="/logout"><i class="bi bi-box-arrow-in-left"></i>
+                    Logout</a>
+                <% } %>
+            </div>
+            <!-- <div class="navbar-nav flex-column">
+                <a class="nav-link" href="/user/login">Login</a>
+                <a class="nav-link" href="/user/register">Register</a>
+                <a class="nav-link" href="/user/logout">Logout</a>
+            </div> -->
+        </div>
+    </div>
+</nav>

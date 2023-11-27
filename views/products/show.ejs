@@ -1,0 +1,50 @@
+<%- layout('layouts/boilerplate.ejs')  %>
+<table class="table w-50 mx-auto mt-2">
+    <thead>
+        <tr>
+            <th>
+                <div>Title</div>
+            </th>
+            <td scope="col"><%= product.title %></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>Price</td>
+            <td scope="row"><%= product.price %>&euro;</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td scope="row"><%= product.description %></td>
+        </tr>
+        <tr>
+            <th>Full Detail</th>
+            <td><%- product.fullDetail %></td>
+        </tr>
+        <tr>
+            <th>Category</th>
+            <% if(product.category) { %>
+            <td><%= product.category.charAt(0).toUpperCase() + product.category.slice(1) %></td>
+            <% } %>
+        </tr>
+        <tr>
+            <th>Images</th>
+            <td>
+                <% product.images.forEach(function (img, i) { %>
+                <div class="d-inline-flex flex-row mb-2 me-1">
+                    <img src="<%= img.thumbnail %>" class="img-thumbnail" alt="">
+                </div>
+                <% }) %>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<table class="table w-50 mx-auto">
+    <thead>
+        <div class="mb-3 offset-5">
+            <a href="/products/<%= product._id%>/edit"><button class="btn btn-success">Edit Product</button></a>
+            <a class="ms-5 link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                href="/products">All Products</a>
+        </div>
+    </thead>
+</table>

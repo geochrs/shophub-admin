@@ -1,0 +1,112 @@
+<%- layout('layouts/boilerplate.ejs')  %>
+<form action="/products" method="POST" enctype="multipart/form-data" class="validated-form" novalidate>
+    <table class="table w-50 mx-auto">
+        <thead>
+            <tr>
+                <th>
+                    <div>
+                        <label class="form-label" for="title">Title</label>
+                    </div>
+                </th>
+                <td scope="col">
+                    <div>
+                        <input class="form-control" type="text" name="product[title]" id="title" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>
+                    <div>
+                        <label class="form-label" for="price">Price</label>
+                    </div>
+                </th>
+                <td scope="col">
+                    <div>
+                        <input class="form-control" type="number" name="product[price]" id="price" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <div>
+                        <label class="form-label" for="description">Description</label>
+                    </div>
+                </th>
+                <td scope="col">
+                    <div>
+                        <input class="form-control" type="text" name="product[description]" id="description">
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <div>
+                        <label class="form-label" for="fulldetail">Full Detail</label>
+                    </div>
+                </th>
+                <td scope="col">
+                    <div>
+                        <textarea class="form-control" type="text" name="product[fullDetail]" id="fulldetail" rows="5"
+                            required></textarea>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <div>
+                        <label class="form-label" for="category">Category</label>
+                    </div>
+                </th>
+                <td scope="col">
+                    <div>
+                        <!-- <input class="form-control" type="text" name="product[category]" id="category"> -->
+                        <select class="form-select" aria-label="Default select example" id="category"
+                            name="product[category]">
+                            <option value="smartphones" selected>Smartphones</option>
+                            <option value="consoles">Consoles</option>
+                            <option value="games">Games</option>
+                        </select>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th> <label for="formFileMultiple" class="form-label">Upload Image(s)</label>
+                </th>
+                <td>
+                    <div class="mb-3">
+                        <input class="form-control" type="file" id="formFileMultiple" name="image" multiple required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table w-50 mx-auto">
+        <thead>
+            <div class="mb-3 offset-5">
+                <button class="btn btn-primary">Add Product</button>
+                <a class="ms-5 link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                    href="/products">All Products</a>
+            </div>
+        </thead>
+    </table>
+</form>

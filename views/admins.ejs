@@ -1,0 +1,60 @@
+<%- layout('layouts/boilerplate') %>
+<form action="/admins?_method=PUT" method="POST" class="validated-form" novalidate>
+    <table class="table w-50 mx-auto mt-2">
+        <thead>
+            <tr>
+                <th scope="col">Add New Admin</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td scope="row" class="d-flex gap-2">
+                    <div class="flex-fill">
+                        <input class="form-control" type="text" name="adminCode">
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary">Add <i class="bi bi-plus-lg"></i>
+                        </button>
+                    </div>
+                </td>
+
+            </tr>
+        </tbody>
+</form>
+<thead>
+    <tr>
+        <th scope="col">Existing Admins</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td scope="row" class="d-flex gap-2">
+            <% for (let user of users) { %>
+            <% if (user.isAdmin) { %>
+            <div class="flex-fill">
+                <%= user.username.charAt(0).toUpperCase() + user.username.slice(1) %>
+            </div>
+            <% if(!currentUser.isAdmin){ %>
+            <div>
+                <form action="/admins?_method=DELETE" method="POST">
+                    <button class="btn btn-danger" disabled><i class="bi bi-x-lg"></i>
+                    </button>
+                </form>
+            </div>
+            <% }else { %>
+            <div>
+                <form action="/admins?_method=DELETE" method="POST">
+                    <button class="btn btn-danger"><i class="bi bi-x-lg"></i>
+                    </button>
+                </form>
+            </div>
+            <% } %>
+            <% } %>
+            <% } %>
+        </td>
+    </tr>
+</tbody>
+</table>

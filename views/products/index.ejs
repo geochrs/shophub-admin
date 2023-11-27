@@ -1,0 +1,66 @@
+<%- layout('layouts/boilerplate.ejs')  %>
+<table class="table table-striped shadow p-3 mb-3 bg-body-tertiary rounded w-75 mx-auto mt-2">
+    <thead>
+        <tr>
+            <th scope="col">Image</th>
+            <th scope="col">Title</th>
+            <th scope="col">Category</th>
+            <% if(!currentUser){ %>
+            <th scope="col" colspan="2"><a href="/products/new" class="btn btn-primary ms-3 disabled">New <i
+                        class="bi bi-plus-lg"></i>
+                </a>
+            </th>
+            <% } else { %>
+            <th scope="col" colspan="2"><a href="/products/new" class="btn btn-primary ms-3">New <i
+                        class="bi bi-plus-lg"></i>
+                </a>
+            </th>
+            <% } %>
+        </tr>
+    </thead>
+    <tbody>
+        <% for (let product of products) { %>
+        <tr>
+            <td scope="row"><img src="<%= product.images[0].thumbnail %>" alt=""></td>
+            <th><a href="/products/<%= product._id%>"
+                    class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"><%= product.title %></a>
+            </th>
+            <% if (product.category){ %>
+            <td style="width: 20%;"><a href="/products?category=<%= product.category%>"
+                    class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"><%= product.category.charAt(0).toUpperCase() + product.category.slice(1) %></a>
+            </td>
+            <% } %>
+            <% if(!currentUser || !currentUser.isAdmin) { %>
+            <td><a href="/products/<%= product._id%>/edit" class="btn btn-success disabled"><i class="bi bi-pencil"></i>
+                </a></td>
+            <td>
+                <form action="/products/<%=product._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger" disabled><i class="bi bi-x-lg"></i>
+                    </button>
+                </form>
+            </td>
+            <% } else { %>
+            <td><a href="/products/<%= product._id%>/edit" class="btn btn-success"><i class="bi bi-pencil"></i>
+                </a></td>
+            <td>
+                <form action="/products/<%=product._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger"><i class="bi bi-trash3"></i>
+                    </button>
+                </form>
+            </td>
+            <% } %>
+        </tr>
+        <% } %>
+    </tbody>
+</table>
+<table class="table w-75 mx-auto">
+    <thead>
+        <div class="mb-3 offset-2">
+            <% if (category !== 'All'){ %>
+            <a href="/products"
+                class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Back
+            </a>
+            <% } %>
+        </div>
+    </thead>
+</table>
