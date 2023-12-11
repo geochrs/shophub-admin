@@ -28,6 +28,7 @@ const User = require('./models/user');
 const { isLoggedIn, validateProduct } = require('./middleware');
 
 const productRoutes = require('./routes/products')
+const adminRoutes = require('./routes/admins');
 
 const dbUrl = process.env.DB_URL
 mongoose.connect(dbUrl);
@@ -145,6 +146,7 @@ app.get('/', (req, res) => {
 
 //routes
 app.use('/products', productRoutes);
+app.use('/admins', adminRoutes);
 
 //show register form
 app.get('/register', (req, res) => {
@@ -188,45 +190,6 @@ app.get('/logout', (req, res) => {
         req.flash('success', 'Goodbye!');
         res.redirect('/');
     });
-})
-
-//admin route
-app.get('/admins', async (req, res) => {
-    const users = await User.find({})
-    res.render('admins', { users });
-})
-
-//handle isAdmin
-app.put('/admins', async (req, res) => {
-    const user = await User.findByIdAndUpdate({ _id: req.user._id }, { runValidators: true, new: true })
-    if (user) {
-        const { adminCode } = req.body;
-        if (user.isAdmin) {
-            req.flash('success', 'You are already an admin!')
-        } else {
-            if (adminCode === 'secret') {
-                await user.toggleIsAdmin();
-                await user.save();
-                req.flash('success', 'Successfully changed role!');
-            } else {
-                req.flash('error', 'Please try again!')
-            }
-        }
-    }
-    res.redirect('/admins');
-})
-
-//change isAdmin back to false
-app.delete('/admins', async (req, res) => {
-    const user = await User.findByIdAndUpdate({ _id: req.user._id }, { runValidators: true, new: true })
-    if (user) {
-        await user.toggleIsAdmin();
-        await user.save();
-        req.flash('success', 'Successfully removed role!');
-    } else {
-        req.flash('error', 'Cant delete admin!')
-    }
-    res.redirect('/admins');
 })
 
 //error class
