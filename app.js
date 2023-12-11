@@ -11,7 +11,7 @@ const multer = require('multer');
 const { cloudinary, storage } = require('./cloudinary');
 const upload = multer({ storage });
 const mongoose = require('mongoose');
-const ObjectID = require('mongoose').Types.ObjectId;
+// const ObjectID = require('mongoose').Types.ObjectId;
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 
@@ -26,6 +26,8 @@ const Product = require('./models/product');
 const User = require('./models/user');
 
 const { isLoggedIn, validateProduct } = require('./middleware');
+
+const productRoutes = require('./routes/products')
 
 const dbUrl = process.env.DB_URL
 mongoose.connect(dbUrl);
@@ -141,6 +143,9 @@ app.get('/', (req, res) => {
     res.render('dashboard');
 })
 
+//routes
+app.use('/products', productRoutes);
+
 //show register form
 app.get('/register', (req, res) => {
     res.render('users/register');
@@ -184,85 +189,6 @@ app.get('/logout', (req, res) => {
         res.redirect('/');
     });
 })
-
-//show products
-app.get('/products', catchAsync(async (req, res) => {
-    const { category } = req.query;
-    if (category) {
-        const products = await Product.find({ category })
-        res.render('products/index', { products, category, title: 'Category Products' });
-    }
-    else {
-        const products = await Product.find({})
-        res.render('products/index', { products, category: 'All', title: 'All Products' });
-    }
-}));
-
-//show new form
-app.get('/products/new', isLoggedIn, (req, res) => {
-    res.render('products/new', { title: 'New Product' });
-});
-
-//handle new product
-app.post('/products', upload.array('image'), validateProduct, catchAsync(async (req, res) => {
-    const product = new Product(req.body.product);
-    product.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
-    await product.save();
-    req.flash('success', 'Successfully created new product!');
-    res.redirect(`/products/${product._id}`);
-}))
-
-
-//show specific product
-app.get('/products/:id', catchAsync(async (req, res) => {
-    if (!ObjectID.isValid(req.params.id)) {
-        throw new ExpressError('Invalid Id', 500);
-    }
-    const product = await Product.findById(req.params.id)
-    if (!product) {
-        // throw new ExpressError('Invalid Product', 404);
-        req.flash('error', 'Cannot find that product!')
-        return res.redirect('/products');
-    }
-    res.render('products/show', { product, title: product.title })
-}))
-
-//show edit product
-app.get('/products/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
-    if (!ObjectID.isValid(req.params.id)) {
-        throw new ExpressError('Invalid Id', 500);
-    }
-    const product = await Product.findById(req.params.id)
-    if (!product) {
-        // throw new ExpressError('Invalid Product', 404);
-        req.flash('error', 'Cannot edit deleted product!')
-        return res.redirect('/products');
-    }
-    res.render('products/edit', { product, title: `Update ${product.title}` });
-}))
-
-//handle edit product
-app.put('/products/:id', upload.array('image'), validateProduct, catchAsync(async (req, res) => {
-    const product = await Product.findByIdAndUpdate(req.params.id, { ...req.body.product }, { runValidators: true, new: true });
-    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
-    product.images.push(...imgs);
-    await product.save();
-    if (req.body.deleteImages) {
-        for (let filename of req.body.deleteImages) {
-            await cloudinary.uploader.destroy(filename);
-        }
-        await product.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } });
-    }
-    req.flash('success', 'Successfully updated product!');
-    res.redirect(`/products/${product._id}`);
-}))
-
-//handle delete product
-app.delete('/products/:id', catchAsync(async (req, res) => {
-    await Product.findByIdAndDelete(req.params.id);
-    req.flash('success', 'Successfully deleted product!')
-    res.redirect('/products');
-}))
 
 //admin route
 app.get('/admins', async (req, res) => {
