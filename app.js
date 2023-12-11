@@ -5,13 +5,8 @@ const app = express();
 const path = require('path');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
-const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
-const multer = require('multer');
-const { cloudinary, storage } = require('./cloudinary');
-const upload = multer({ storage });
 const mongoose = require('mongoose');
-// const ObjectID = require('mongoose').Types.ObjectId;
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 
@@ -22,13 +17,11 @@ const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 
-const Product = require('./models/product');
 const User = require('./models/user');
-
-const { isLoggedIn, validateProduct } = require('./middleware');
 
 const productRoutes = require('./routes/products')
 const adminRoutes = require('./routes/admins');
+const userRoutes = require('./routes/users');
 
 const dbUrl = process.env.DB_URL
 mongoose.connect(dbUrl);
@@ -147,50 +140,7 @@ app.get('/', (req, res) => {
 //routes
 app.use('/products', productRoutes);
 app.use('/admins', adminRoutes);
-
-//show register form
-app.get('/register', (req, res) => {
-    res.render('users/register');
-})
-
-//handle register
-app.post('/register', catchAsync(async (req, res) => {
-    try {
-        const { email, username, password } = req.body;
-        const user = new User({ email, username });
-        const registeredUser = await User.register(user, password);
-        req.login(registeredUser, err => {
-            if (err) return next(err);
-            req.flash('success', `Welcome ${user.username}`);
-            res.redirect('/');
-        })
-    } catch (e) {
-        req.flash('error', e.message);
-        res.redirect('register')
-    }
-}))
-
-//show login form
-app.get('/login', (req, res) => {
-    res.render('users/login');
-})
-
-//handle login
-app.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), (req, res) => {
-    req.flash('success', 'Welcome back');
-    res.redirect('/');
-})
-
-//logout route
-app.get('/logout', (req, res) => {
-    req.logout(function (err) {
-        if (err) {
-            return next(err);
-        }
-        req.flash('success', 'Goodbye!');
-        res.redirect('/');
-    });
-})
+app.use(userRoutes);
 
 //error class
 app.all('*', (req, res, next) => {
