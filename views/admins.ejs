@@ -31,8 +31,8 @@
 </thead>
 <tbody>
     <tr>
+        <% for (let user of users) { %>
         <td scope="row" class="d-flex gap-2">
-            <% for (let user of users) { %>
             <% if (user.isAdmin) { %>
             <div class="flex-fill">
                 <%= user.username.charAt(0).toUpperCase() + user.username.slice(1) %>

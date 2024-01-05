@@ -19,9 +19,10 @@ const LocalStrategy = require('passport-local');
 
 const User = require('./models/user');
 
-const productRoutes = require('./routes/products')
+const productRoutes = require('./routes/products');
 const adminRoutes = require('./routes/admins');
 const userRoutes = require('./routes/users');
+const orderRoutes = require('./routes/orders');
 
 const dbUrl = process.env.DB_URL
 mongoose.connect(dbUrl);
@@ -141,6 +142,7 @@ app.get('/', (req, res) => {
 app.use('/products', productRoutes);
 app.use('/admins', adminRoutes);
 app.use(userRoutes);
+app.use('/orders', orderRoutes);
 
 //error class
 app.all('*', (req, res, next) => {
