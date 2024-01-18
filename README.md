@@ -10,7 +10,7 @@ Shophub | Admin Panel
 :radio_button: Secure user registration and authentication. <br>
 :radio_button: Add/Edit/Remove products only for admins. <br>
 :radio_button: Become admin if u enter the secret code(secret). <br>
-:radio_button: Check user orders(not implemented yet). <br>
+:radio_button: Check user orders. <br>
 
 ## Technology
 
